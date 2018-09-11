@@ -78,6 +78,11 @@ Proof. intros.
        case_eq k1; case_eq k2; cbn; intros; subst; decorate.
 Qed.
 
+Lemma _is_pair: forall k1 k2 X Y Z (f: term X Z) (g: term Y Z), is ro f -> is k1 f -> is k2 g -> is (dmax k1 k2) (pair f g).
+Proof. intros.
+       case_eq k1; case_eq k2; cbn; intros; subst; decorate.
+Qed.
+
  Class PURE {A B: Type} (f: term A B) := isp : is pure f.
  Hint Extern 0 (PURE _) => decorate : typeclass_instances.
 
