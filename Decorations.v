@@ -9,7 +9,7 @@
 
 Require Import Relations Morphisms.
 Require Import Program.
-Require Memory Terms.
+Require Import Memory Terms.
 Set Implicit Arguments.
 
 Module Make(Import M: Memory.T).
@@ -27,6 +27,20 @@ Module Make(Import M: Memory.T).
   | is_ro_rw: forall X Y  (f: term X Y), is ro f -> is rw f.
 
  Hint Constructors is.
+
+Definition dmax (k1 k2: kind): kind :=
+  match k1, k2 with
+    | pure, pure => pure
+    | pure, ro  => ro
+    | pure, ctc  => rw
+    | ro, pure  => ro
+    | ctc, pure => rw
+    | ro, ro   => ro
+    | ro, ctc   => rw
+    | rw, ro   => rw
+    | rw, ctc   => rw
+  end.
+
 
 (*---*)
 
@@ -58,6 +72,11 @@ Module Make(Import M: Memory.T).
 			    || 
 		                 (apply is_ro_rw)
                         ].
+
+Lemma _is_comp: forall k1 k2 X Y Z (f: term X Y) (g: term Y Z), is k1 f -> is k2 g -> is (dmax k1 k2) (f o g).
+Proof. intros.
+       case_eq k1; case_eq k2; cbn; intros; subst; decorate.
+Qed.
 
  Class PURE {A B: Type} (f: term A B) := isp : is pure f.
  Hint Extern 0 (PURE _) => decorate : typeclass_instances.
