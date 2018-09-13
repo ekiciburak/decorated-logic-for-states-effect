@@ -32,13 +32,13 @@ Definition dmax (k1 k2: kind): kind :=
   match k1, k2 with
     | pure, pure => pure
     | pure, ro  => ro
-    | pure, ctc  => rw
+    | pure, rw  => rw
     | ro, pure  => ro
-    | ctc, pure => rw
+    | rw, pure => rw
     | ro, ro   => ro
-    | ro, ctc   => rw
+    | ro, rw   => rw
     | rw, ro   => rw
-    | rw, ctc   => rw
+    | rw, rw   => rw
   end.
 
 
